@@ -14,12 +14,19 @@ var firstNamesData string
 //go:embed data/last_names.csv
 var lastNamesData string
 
-var firstNames []string
-var lastNames []string
+//go:embed data/domains.csv
+var domainsData string
+
+var (
+	firstNames []string
+	lastNames  []string
+	domains    []string
+)
 
 func init() {
 	firstNames = parseCSV(firstNamesData)
 	lastNames = parseCSV(lastNamesData)
+	domains = parseCSV(domainsData)
 }
 
 func parseCSV(data string) []string {
@@ -38,12 +45,12 @@ func parseCSV(data string) []string {
 
 // GenerateFirstName returns a random first name.
 func GenerateFirstName() string {
-	return getRandomName(firstNames)
+	return getRandomEl(firstNames)
 }
 
 // GenerateLastName returns a random last name.
 func GenerateLastName() string {
-	return getRandomName(lastNames)
+	return getRandomEl(lastNames)
 }
 
 // GenerateFullName returns a random full name.
@@ -51,6 +58,25 @@ func GenerateFullName() string {
 	return fmt.Sprintf("%s %s", GenerateFirstName(), GenerateLastName())
 }
 
-func getRandomName(names []string) string {
-	return names[rand.Intn(len(names))]
+// GenerateDomain returns a random domain
+func GenerateDomain() string {
+	return getRandomEl(domains)
+}
+
+// GenerateEmailAddress returns a random email.
+func GenerateEmailAddress() string {
+	firstName := GenerateFirstName()
+	lastName := GenerateLastName()
+	domain := GenerateDomain()
+	return fmt.Sprintf("%s.%s@%s", firstName, lastName, domain)
+}
+
+// GenerateEmailAddressByFullName returns an email with a random domain.
+func GenerateEmailAddressByFullName(firstName, lastName string) string {
+	domain := GenerateDomain()
+	return fmt.Sprintf("%s.%s@%s", firstName, lastName, domain)
+}
+
+func getRandomEl(el []string) string {
+	return el[rand.Intn(len(el))]
 }

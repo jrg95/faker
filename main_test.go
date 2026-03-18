@@ -63,3 +63,4 @@ func TestParseCSVLastNamesMatch(t *testing.T) {
 	lastNames := parseCSV(lastNamesData)
 	assert.Equal(t, names, lastNames)
 }
+
